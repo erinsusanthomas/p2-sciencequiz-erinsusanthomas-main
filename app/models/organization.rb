@@ -42,7 +42,7 @@ class Organization < ApplicationRecord
     #
     # @return boolean
     # the status of the organization
-    def self.make_inactive #? needed
+    def self.make_inactive 
         self.active = false
     end
 end

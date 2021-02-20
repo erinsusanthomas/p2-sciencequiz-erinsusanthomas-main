@@ -7,7 +7,7 @@ build these models and tests properly so they pass our tests at the end of the p
 
 **Organizations must:**
 
-1.	have all proper relationships specified
+1. have all proper relationships specified
 2. have a name, street 1, zip, and short name
 3. only allow US states to be entered as a state
 4. have a valid zip code

@@ -1,6 +1,6 @@
 class Organization < ApplicationRecord
     # 1. have all proper relationships specified
-
+    ## has many 
 
     # 2. have a name, street 1, zip, and short name
     validates_presence_of :name
@@ -9,10 +9,10 @@ class Organization < ApplicationRecord
     validates_presence_of :short_name
 
     # 3. only allow US states to be entered as a state
- 
+    ## helper file in model
 
     # 4. have a valid zip code
-
+    ## helper file in model
 
     # 5. have a short name that is unique in the system (case insensitive)
     validates_uniqueness_of :name
@@ -26,23 +26,27 @@ class Organization < ApplicationRecord
     scope :inactive, -> {where(active:false)}
     scope :alphabetical, -> {order(name)}
 
-    # 7.	have a method called `make_active` which changes the status from inactive to active 
-    # and saves the change in the database ??
+    # 7. have a method called `make_active` which changes the status from inactive to active 
+    # and saves the change in the database 
     # Method to change status from inactive to active and saves the change in the database
     #
     # @return boolean
     # the status of the organization
-    def self.make_active
+    def self.make_active?
         self.active = true
+        self.active.save!
+        return self.active
     end
 
     # 8. have a method called `make_inactive` which changes the status from active to inactive 
-    # and saves the change in the database ??
+    # and saves the change in the database
     # Method to change status from active to inactive and saves the change in the database
     #
     # @return boolean
     # the status of the organization
-    def self.make_inactive 
+    def self.make_inactive? 
         self.active = false
+        self.active.save!
+        return self.active
     end
 end

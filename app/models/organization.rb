@@ -9,10 +9,15 @@ class Organization < ApplicationRecord
     validates_presence_of :short_name
 
     # 3. only allow US states to be entered as a state
-    ## helper file in model
+    STATES = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 
+              'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 
+              'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 
+              'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 
+              'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY']
+    validates_inclusion_of :state, :in => STATES, :message => "Only US states are valid entries"
 
     # 4. have a valid zip code
-    ## helper file in model
+    validates_format_of :zip, :with => /^\d{5}(-\d{4})?$/, :message => "Zip code should be valid"
 
     # 5. have a short name that is unique in the system (case insensitive)
     validates_uniqueness_of :name

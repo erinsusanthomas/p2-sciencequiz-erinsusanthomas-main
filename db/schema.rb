@@ -26,12 +26,12 @@ ActiveRecord::Schema.define(version: 2021_02_22_163246) do
   end
 
   create_table "student_teams", force: :cascade do |t|
-    t.integer "student_id"
-    t.integer "team_id"
-    t.date "start_date"
+    t.integer "student_id", null: false
+    t.integer "team_id", null: false
+    t.date "start_date", null: false
     t.date "end_date"
-    t.integer "position"
-    t.boolean "active"
+    t.integer "position", null: false
+    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["student_id"], name: "index_student_teams_on_student_id"
@@ -39,21 +39,21 @@ ActiveRecord::Schema.define(version: 2021_02_22_163246) do
   end
 
   create_table "students", force: :cascade do |t|
-    t.string "first_name"
-    t.string "last_name"
-    t.integer "grade"
-    t.integer "organization_id"
-    t.boolean "active"
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.integer "grade", null: false
+    t.integer "organization_id", null: false
+    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organization_id"], name: "index_students_on_organization_id"
   end
 
   create_table "teams", force: :cascade do |t|
-    t.string "name"
-    t.integer "organization_id"
-    t.string "division"
-    t.boolean "active"
+    t.string "name", null: false
+    t.integer "organization_id", null: false
+    t.string "division", null: false
+    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organization_id"], name: "index_teams_on_organization_id"

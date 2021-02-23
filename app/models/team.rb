@@ -1,5 +1,7 @@
 class Team < ApplicationRecord
   belongs_to :organization
+  has_many :student_teams
+  has_many :students, through: :student_teams
 
   validates_presence_of :name
   validates_presence_of :organization_id

@@ -1,6 +1,9 @@
 class Organization < ApplicationRecord
     # 1. have all proper relationships specified
-    ## has many 
+    has_many :students
+    has_many :teams
+    # has_many :student_teams, through: :teams 
+    # has_many :student_teams, through: :students 
 
     # 2. have a name, street 1, zip, and short name
     validates_presence_of :name
@@ -17,7 +20,7 @@ class Organization < ApplicationRecord
     validates_inclusion_of :state, :in => STATES, :message => "Only US states are valid entries"
 
     # 4. have a valid zip code
-    validates_format_of :zip, :with => /^\d{5}(-\d{4})?$/, :message => "Zip code should be valid"
+    validates_format_of :zip, with: /\d{5}(-\d{4})?/, message: "Zip code should be valid"
 
     # 5. have a short name that is unique in the system (case insensitive)
     validates_uniqueness_of :name

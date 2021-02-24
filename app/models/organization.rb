@@ -1,9 +1,7 @@
 class Organization < ApplicationRecord
     # 1. have all proper relationships specified
     has_many :students
-    has_many :teams
-    # has_many :student_teams, through: :teams 
-    # has_many :student_teams, through: :students 
+    has_many :teams  
 
     # 2. have a name, street 1, zip, and short name
     validates_presence_of :name

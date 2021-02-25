@@ -28,9 +28,9 @@ class Organization < ApplicationRecord
 	#     - `active` -- returns only active organizations
 	#     - `inactive` -- returns only inactive organizations
 	#     - `alphabetical` -- orders results alphabetically
-    scope :active, -> {where(active:true)}
-    scope :inactive, -> {where(active:false)}
-    scope :alphabetical, -> {order(name)}
+    scope :active, -> { where(active: true) }
+    scope :inactive, -> { where(active: false) }
+    scope :alphabetical, -> { order('name') }
 
     # 7. have a method called `make_active` which changes the status from inactive to active 
     # and saves the change in the database 

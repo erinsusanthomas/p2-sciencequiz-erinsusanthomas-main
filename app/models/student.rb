@@ -28,11 +28,12 @@ class Student < ApplicationRecord
   scope :alphabetical, -> { order('last_name', 'first_name') }
 
   #########DOUBT################ how can i ensure that the student i enter is a junior or senior based on grade
-  scope :juniors, -> { joins(:teams).where(teams: {division: "junior"}) }
-  scope :seniors, -> { joins(:teams).where(teams: {division: "senior"}) }
+  # scope :juniors, -> { joins(:teams).where(teams: {division: "junior"}) }
+  # scope :seniors, -> { joins(:teams).where(teams: {division: "senior"}) }
+  ##OR?
+  scope :juniors, -> { where('grade <= 6') }
+  scope :seniors, -> { where('grade > 6') }
   
-
-
   # 6.	have a method called `make_active` which changes the status from inactive to active 
   # and saves the change in the database
   # Method to change status from inactive to active and saves the change in the database
@@ -52,12 +53,17 @@ class Student < ApplicationRecord
   # 8. have a method called `current_team` which return a team object representing the team the student 
   # is currently registered with, or nil if no such registration exists
   def current_team
-    a = self.teams.where(id: self.id)
-    # a = student_teams.find_by(student_id: self.id)
-    puts a
+    teamIdForStudent = StudentTeam.select(:team_id).where(student_id: self.id)
+    teamInfo = Team.where(id: teamIdForStudent)
+    teamInfo
   end
 
-  # 9. have a method called `junior?` which returns true if the student is in the junior division and false otherwise
+  # 9. have a method called `junior?` which returns true if the student is in the junior division 
+  # and false otherwise  
+                      ##should i do this by grade or linking to team##
+  def junior?
+    grade <=6
+  end
 
   # 10. have a method called `name` which returns the student's full name as "last-name, first-name"
   def name

@@ -15,7 +15,8 @@ class Organization < ApplicationRecord
               'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 
               'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 
               'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY']
-    validates_inclusion_of :state, :in => STATES, :message => "Only US states are valid entries"
+    validates_inclusion_of :state, :in => STATES, :message => "Only US states are valid entries", 
+                                                    allow_blank: true
 
     # 4. have a valid zip code
     validates_format_of :zip, with: /\d{5}(-\d{4})?/, message: "Zip code should be valid"
@@ -35,24 +36,16 @@ class Organization < ApplicationRecord
     # 7. have a method called `make_active` which changes the status from inactive to active 
     # and saves the change in the database 
     # Method to change status from inactive to active and saves the change in the database
-    #
-    # @return boolean
-    # the status of the organization
-    def self.make_active?
+    def self.make_active
         self.active = true
-        self.active.save!
-        return self.active
+        self.save!
     end
 
     # 8. have a method called `make_inactive` which changes the status from active to inactive 
     # and saves the change in the database
     # Method to change status from active to inactive and saves the change in the database
-    #
-    # @return boolean
-    # the status of the organization
-    def self.make_inactive? 
+    def self.make_inactive 
         self.active = false
-        self.active.save!
-        return self.active
+        self.save!
     end
 end

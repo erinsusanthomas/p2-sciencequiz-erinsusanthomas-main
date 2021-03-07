@@ -1,7 +1,7 @@
 class Team < ApplicationRecord
   # 1. have all proper relationships specified
   # 3. belong to an organization that is active in ScienceQuiz when first created
-  belongs_to :organization, -> { where active: true } #, class_name: 'Organization', foreign_key: 'organization_id'
+  belongs_to :organization
   has_many :student_teams
   has_many :students, through: :student_teams
 
@@ -15,7 +15,7 @@ class Team < ApplicationRecord
 
   # 4. must be in a valid division
   validates_inclusion_of :division, :in => ["senior", "junior"], 
-                                :message => "Only 2 divisions: either senior or junior"
+                         :message => "Only 2 divisions: either senior or junior"
 
   # 5. have the following scopes:
   # 	- `active` -- returns only active teams
@@ -29,16 +29,12 @@ class Team < ApplicationRecord
   scope :alphabetical, -> { order('name') }
   scope :juniors, -> { where(division: "junior") }
   scope :seniors, -> { where(division: "senior") }
-
-  #########DOUBT################
-  # scope :for_organization, ->(organization) { where("organization_id = ?", organization) }
-  scope :for_organization, ->(organization) { joins(:organization).where('organizations.name LIKE ?', "#{organization}%") }
-  # scope :for_organization, ->(organization) {where("organization_id IN (?)", Organization.select(:organization_id).where('name LIKE ?', "#{organization}%")) }
-  
+  scope :for_organization, ->(organization) { where("organization_id = ?", organization) }
+ 
   # 6.	have a method called `make_active` which changes the status from inactive to active 
   # and saves the change in the database
   # Method to change status from inactive to active and saves the change in the database
-  def self.make_active
+  def make_active
         self.active = true
         self.save!
   end
@@ -46,7 +42,7 @@ class Team < ApplicationRecord
   # 7. have a method called `make_inactive` which changes the status from active to inactive 
   # and saves the change in the database
   # Method to change status from active to inactive and saves the change in the database
-  def self.make_inactive
+  def make_inactive
     self.active = false
     self.save!
   end

@@ -1,12 +1,9 @@
 class StudentTeam < ApplicationRecord
-  #Callbacks 
-  before_create :end_previous_team_assignment
-
   # 1. have all proper relationships specified
   # 3. be connected to a student that is active in ScienceQuiz when first created
-  belongs_to :student, -> { where active: true } #, class_name: 'Student', foreign_key: 'student_id'
+  belongs_to :student
   # 4. be connected to a team that is active in ScienceQuiz when first created
-  belongs_to :team, -> { where active: true } #, class_name: 'Team', foreign_key: 'team_id'
+  belongs_to :team
 
   # 2. have a start date, position, and affiliated student and team
   validates_presence_of :student_id
@@ -14,8 +11,7 @@ class StudentTeam < ApplicationRecord
   validates_presence_of :start_date
   validates_presence_of :position
 
-  # 5. have a valid position (which one?)
-  validates_inclusion_of :position, :in => 1..5, :message => "The student's rank in team; from 1-5"
+  # 5. have a valid position
   validates_numericality_of :position, only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 5,
                                                                :message => "The student's rank in team; from 1-5"
 
@@ -38,22 +34,16 @@ class StudentTeam < ApplicationRecord
   scope :alphabetical, -> { joins(:student).order('students.last_name', 'students.first_name') }
   scope :chronological, -> { order('start_date') }
   scope :by_position, -> { order('position') }
-  scope :captains, -> { where('position = 1') }  #what if 2 members of the same team have position 1?
+  scope :captains, -> { where('position = 1') }  
   scope :for_team, ->(team) { where("team_id = ?", team) }
   scope :for_student, ->(student) {where("student_id = ?", student) }
-  scope :current, -> { where("end_date IS NULL OR end_date > ?", Date.today) } 
-                              ##can I assume the blank as current??
-  scope :past, -> { where("end_date <= ?", Date.today) }
-
-  ## OR?? 
-  # scope :for_team, ->(team) { joins(:team).where('teams.name LIKE ?', "#{team}") }
-  # scope :for_student, ->(student) { joins(:student).where('students.first_name LIKE ?', "#{student}") }
-
+  scope :current, -> { where("end_date IS NULL") } 
+  scope :past, -> { where("end_date IS NOT NULL") }
 
   # 8.	have a method called `make_active` which changes the status from inactive to active 
   # and saves the change in the database
   # Method to change status from inactive to active and saves the change in the database
-  def self.make_active
+  def make_active
     self.active = true
     self.save!
   end
@@ -61,7 +51,7 @@ class StudentTeam < ApplicationRecord
   # 9. have a method called `make_inactive` which changes the status from active to inactive 
   # and saves the change in the database
   # Method to change status from active to inactive and saves the change in the database
-  def self.make_inactive
+  def make_inactive
     self.active = false
     self.save!
   end
@@ -71,6 +61,7 @@ class StudentTeam < ApplicationRecord
   # Essentially this method and callback will update any previously open student-team assignment (if applicable) 
   # and terminate it by automatically by setting the end date of the old student-team assignment to the start date 
   # of the new student-team assignment.
+  before_create :end_previous_team_assignment
 
   private 
   def dates_validation #have no start dates in the future or end dates that precede start dates
@@ -82,12 +73,10 @@ class StudentTeam < ApplicationRecord
   end
 
   def end_previous_team_assignment
-    StudentTeam.all.each do |st|
-      if st.end_date.blank? 
-        st.end_date = self.start_date
-        st.save!
-      end
-    end
+    previous = StudentTeam.current.for_student(self.student_id).take
+    previous.update_attribute(:end_date, self.start_date) unless previous.nil?
+    # previous = StudentTeam.current.for_team(self.team_id).take
+    # previous.update_attribute(:end_date, self.start_date) unless previous.nil?
   end
  
 end

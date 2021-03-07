@@ -1,7 +1,7 @@
 class Student < ApplicationRecord
   # 1. have all proper relationships specified
   # 3. belong to an organization that is active in ScienceQuiz when first created 
-  belongs_to :organization, -> { where active: true } #, class_name: 'Organization', foreign_key: 'organization_id'
+  belongs_to :organization
   has_many :student_teams
   has_many :teams, through: :student_teams
 
@@ -12,8 +12,6 @@ class Student < ApplicationRecord
   validates_presence_of :organization_id
 
   # 4. have a grade that is at least 3rd grade and not higher than 12th grade (which one?)
-  validates_inclusion_of :grade, :in => 3..12, 
-                  :message => "The student's grade must be at least 3rd grade and not higher than 12th grade"
   validates_numericality_of :grade, only_integer: true, greater_than_or_equal_to: 3, less_than_or_equal_to: 12,
                   :message => "The student's grade must be at least 3rd grade and not higher than 12th grade"
 
@@ -26,18 +24,13 @@ class Student < ApplicationRecord
   scope :active, -> { where(active: true) }
   scope :inactive, -> { where(active: false) }
   scope :alphabetical, -> { order('last_name', 'first_name') }
-
-  #########DOUBT################ how can i ensure that the student i enter is a junior or senior based on grade
-  # scope :juniors, -> { joins(:teams).where(teams: {division: "junior"}) }
-  # scope :seniors, -> { joins(:teams).where(teams: {division: "senior"}) }
-  ##OR?
   scope :juniors, -> { where('grade <= 6') }
   scope :seniors, -> { where('grade > 6') }
   
   # 6.	have a method called `make_active` which changes the status from inactive to active 
   # and saves the change in the database
   # Method to change status from inactive to active and saves the change in the database
-  def self.make_active
+  def make_active
       self.active = true
       self.save!
   end
@@ -45,7 +38,7 @@ class Student < ApplicationRecord
   # 7. have a method called `make_inactive` which changes the status from active to inactive 
   # and saves the change in the database
   # Method to change status from active to inactive and saves the change in the database
-  def self.make_inactive
+  def make_inactive
     self.active = false
     self.save!
   end
@@ -59,8 +52,7 @@ class Student < ApplicationRecord
   end
 
   # 9. have a method called `junior?` which returns true if the student is in the junior division 
-  # and false otherwise  
-                      ##should i do this by grade or linking to team##
+  # and false otherwise 
   def junior?
     grade <=6
   end

@@ -36,7 +36,7 @@ class Organization < ApplicationRecord
     # 7. have a method called `make_active` which changes the status from inactive to active 
     # and saves the change in the database 
     # Method to change status from inactive to active and saves the change in the database
-    def self.make_active
+    def make_active
         self.active = true
         self.save!
     end
@@ -44,7 +44,7 @@ class Organization < ApplicationRecord
     # 8. have a method called `make_inactive` which changes the status from active to inactive 
     # and saves the change in the database
     # Method to change status from active to inactive and saves the change in the database
-    def self.make_inactive 
+    def make_inactive 
         self.active = false
         self.save!
     end

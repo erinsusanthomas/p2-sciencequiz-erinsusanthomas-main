@@ -16,7 +16,7 @@ class Organization < ApplicationRecord
               'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 
               'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY']
     validates_inclusion_of :state, :in => STATES, :message => "Only US states are valid entries", 
-                                                    allow_blank: true
+                                                    allow_nil: true
 
     # 4. have a valid zip code
     validates_format_of :zip, with: /\d{5}(-\d{4})?/, message: "Zip code should be valid"

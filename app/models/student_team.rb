@@ -16,7 +16,8 @@ class StudentTeam < ApplicationRecord
                                                                :message => "The student's rank in team; from 1-5"
 
   # 6. have no start dates in the future or end dates that precede start dates
-  validate :dates_validation
+  validates_date :start_date, on_or_before: Date.today, :on_or_before_message => "is in the future!"
+  validates_date :end_date, after: :start_date, allow_nil: true, :after_message => "precedes the start date!"
 
   # 7. have the following scopes:
   # 	- `active` -- returns only active teams
@@ -64,19 +65,9 @@ class StudentTeam < ApplicationRecord
   before_create :end_previous_team_assignment
 
   private 
-  def dates_validation #have no start dates in the future or end dates that precede start dates
-    if start_date > Date.today
-      errors.add("The start date #{start_date} is in the future!")
-    elsif end_date.blank? == false && end_date < start_date
-      errors.add("The end date #{end_date} precedes the start date #{start_date}!")
-    end
-  end
-
   def end_previous_team_assignment
-    previous = StudentTeam.current.for_student(self.student_id).take
-    previous.update_attribute(:end_date, self.start_date) unless previous.nil?
-    # previous = StudentTeam.current.for_team(self.team_id).take
-    # previous.update_attribute(:end_date, self.start_date) unless previous.nil?
+    previous_current_student = self.student.student_teams.current.first
+    previous_current_student.update_attribute(:end_date, self.start_date) unless previous_current_student.nil?
   end
  
 end

@@ -46,9 +46,7 @@ class Student < ApplicationRecord
   # 8. have a method called `current_team` which return a team object representing the team the student 
   # is currently registered with, or nil if no such registration exists
   def current_team
-    teamIdForStudent = StudentTeam.select(:team_id).where(student_id: self.id)
-    teamInfo = Team.where(id: teamIdForStudent)
-    teamInfo
+    self.teams
   end
 
   # 9. have a method called `junior?` which returns true if the student is in the junior division 

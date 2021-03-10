@@ -15,14 +15,14 @@ class Organization < ApplicationRecord
               'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 
               'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 
               'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY']
-    validates_inclusion_of :state, :in => STATES, :message => "Only US states are valid entries", 
-                                                    allow_nil: true
-
+    validates_inclusion_of :state, :in => STATES, allow_nil: true, :message => "Only US states are valid entries" 
+                                                    
     # 4. have a valid zip code
-    validates_format_of :zip, with: /\d{5}(-\d{4})?/, message: "Zip code should be valid"
+    validates_format_of :zip, with: /\A\d{5}\z/, message: "Zip code should be valid"
+
+    validates_uniqueness_of :name # validation added based on data dictionary provided
 
     # 5. have a short name that is unique in the system (case insensitive)
-    validates_uniqueness_of :name
     validates_uniqueness_of :short_name, :case_sensitive => false
 
     # 6. have the following scopes:

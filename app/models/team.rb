@@ -10,8 +10,7 @@ class Team < ApplicationRecord
   validates_presence_of :organization_id
   validates_presence_of :division
 
-  # specifications based on data dictionary provided
-  validates_uniqueness_of :name
+  validates_uniqueness_of :name # validation added based on data dictionary provided
 
   # 4. must be in a valid division
   validates_inclusion_of :division, :in => ["senior", "junior"], 

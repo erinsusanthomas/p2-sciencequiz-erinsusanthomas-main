@@ -13,24 +13,24 @@
 ActiveRecord::Schema.define(version: 2021_02_22_163246) do
 
   create_table "organizations", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "street_1", null: false
+    t.string "name"
+    t.string "street_1"
     t.string "street_2"
     t.string "city"
     t.string "state"
-    t.string "zip", null: false
-    t.string "short_name", null: false
+    t.string "zip"
+    t.string "short_name"
     t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "student_teams", force: :cascade do |t|
-    t.integer "student_id", null: false
-    t.integer "team_id", null: false
-    t.date "start_date", null: false
+    t.integer "student_id"
+    t.integer "team_id"
+    t.date "start_date"
     t.date "end_date"
-    t.integer "position", null: false
+    t.integer "position"
     t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -39,10 +39,10 @@ ActiveRecord::Schema.define(version: 2021_02_22_163246) do
   end
 
   create_table "students", force: :cascade do |t|
-    t.string "first_name", null: false
-    t.string "last_name", null: false
-    t.integer "grade", null: false
-    t.integer "organization_id", null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.integer "grade"
+    t.integer "organization_id"
     t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -50,9 +50,9 @@ ActiveRecord::Schema.define(version: 2021_02_22_163246) do
   end
 
   create_table "teams", force: :cascade do |t|
-    t.string "name", null: false
-    t.integer "organization_id", null: false
-    t.string "division", null: false
+    t.string "name"
+    t.integer "organization_id"
+    t.string "division"
     t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

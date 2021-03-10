@@ -5,4 +5,4 @@ FactoryBot.define do
       division { "senior" }
       active { true }
     end
-  end
+end

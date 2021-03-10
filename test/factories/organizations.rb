@@ -9,4 +9,4 @@ FactoryBot.define do
       short_name { "CMU" }
       active { true }
     end
-  end
+end

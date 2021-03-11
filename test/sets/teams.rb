@@ -9,9 +9,9 @@ module Contexts
         end
 
         def destroy_teams
-            @cmu_team1.delete
-            @arizona_team1.delete
-            @queens_team1.delete
+            @cmu_team1.destroy
+            @arizona_team1.destroy
+            @queens_team1.destroy
         end
         
     end
